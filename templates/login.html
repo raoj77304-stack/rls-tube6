@@ -1,4 +1,100 @@
-<!doctype html><html><head><meta charset="UTF-8"><title>Login</title><link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"></head>
-<body><div class="auth"><h1>▶ RLS <span>Tube</span></h1><h2>Login</h2>
-<form method="post"><input name="username" placeholder="Username" required><input type="password" name="password" placeholder="Password" required><button>Login</button></form>
-<p>New user? <a href="/signup">Create account</a></p><a href="/">← Home</a></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - RLS Tube</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="topbar">
+
+        <div class="logo">
+            <a href="/">RLS Tube</a>
+        </div>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/signup">Sign Up</a>
+        </nav>
+
+    </header>
+
+
+    <!-- Login Box -->
+    <main class="auth-page">
+
+        <div class="auth-box">
+
+            <h1>Login</h1>
+
+            <p class="auth-subtitle">
+                Login to your RLS Tube account
+            </p>
+
+
+            <form method="POST" action="/login">
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter username"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter password"
+                        required>
+
+                </div>
+
+
+                <button type="submit" class="btn login-btn">
+                    Login
+                </button>
+
+            </form>
+
+
+            <p class="auth-footer">
+                Don't have an account?
+                <a href="/signup">Create Account</a>
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 RLS Tube. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

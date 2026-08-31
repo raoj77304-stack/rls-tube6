@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ video.title }}</title><link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"></head>
+<body>
+<header><a class="logo" href="/">▶ <b>RLS</b> <span>Tube</span></a><a class="btn" href="/">Home</a></header>
+<main class="watch">
+<video controls autoplay><source src="{{ url_for('static',filename='uploads/'+video.filename) }}"></video>
+<h1>{{ video.title }}</h1><a class="channel-name" href="/channel/{{ video.user_id }}">{{ video.username }}</a>
+<div class="muted">{{ video.views }} views</div>
+<div class="actions"><button onclick="likeVideo({{ video.id }})">👍 <span id="likes">{{ likes }}</span></button><button onclick="navigator.clipboard.writeText(location.href)">↗ Share</button></div>
+<div class="description">{{ video.description }}</div>
+<h2>Comments</h2>
+{% if session.get('user_id') %}<form class="comment-form" method="post" action="/comment/{{ video.id }}"><input name="comment" placeholder="Add a comment..." required><button>Comment</button></form>{% else %}<p><a href="/login">Login</a> to comment.</p>{% endif %}
+{% for c in comments %}<div class="comment"><b>{{ c.username }}</b><p>{{ c.comment }}</p></div>{% endfor %}
+</main>
+<script>
+async function likeVideo(id){const r=await fetch("/like/"+id,{method:"POST"});if(r.status===401){location="/login";return}const d=await r.json();document.getElementById("likes").textContent=d.likes;}
+</script>
+</body></html>

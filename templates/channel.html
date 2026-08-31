@@ -1,0 +1,10 @@
+<!doctype html><html><head><meta charset="UTF-8"><title>{{ channel.username }} - RLS Tube</title><link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"></head>
+<body><header><a class="logo" href="/">▶ <b>RLS</b> <span>Tube</span></a><a class="btn" href="/">Home</a></header>
+<main class="channel-page"><section class="channel-header"><div class="avatar">{{ channel.username[0].upper() }}</div><div><h1>{{ channel.username }}</h1><p>{{ subscribers }} subscribers</p>
+{% if session.get('user_id') and session['user_id'] != channel.id %}<button id="subBtn" onclick="subscribe({{ channel.id }})">Subscribe</button>{% endif %}
+</div></section>
+<h2>Videos</h2><div class="videos">{% for video in videos %}<article class="card"><a href="/watch/{{ video.id }}">{% if video.thumbnail %}<img src="{{ url_for('static',filename='uploads/'+video.thumbnail) }}">{% else %}<div class="no-thumb">▶</div>{% endif %}<h3>{{ video.title }}</h3></a><div class="muted">{{ video.views }} views</div></article>{% endfor %}</div></main>
+<script>
+async function subscribe(id){const r=await fetch("/subscribe/"+id,{method:"POST"});if(r.status===401){location="/login";return}const d=await r.json();if(d.error)return;document.getElementById("subBtn").textContent=d.subscribed?"Subscribed ✓":"Subscribe";}
+</script>
+</body></html>

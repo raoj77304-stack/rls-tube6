@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RLS Tube - Home</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f0f0f;
+            color: white;
+        }
+
+        /* Header */
+        header {
+            height: 65px;
+            background: #181818;
+            display: flex;
+            align-items: center;
+            padding: 0 25px;
+            gap: 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #292929;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #ff0033;
+            white-space: nowrap;
+        }
+
+        .search-box {
+            flex: 1;
+            display: flex;
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 42px;
+            background: #121212;
+            border: 1px solid #444;
+            color: white;
+            padding: 0 15px;
+            font-size: 16px;
+            border-radius: 22px 0 0 22px;
+            outline: none;
+        }
+
+        .search-box button {
+            width: 60px;
+            border: none;
+            background: #303030;
+            color: white;
+            border-radius: 0 22px 22px 0;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .search-box button:hover {
+            background: #444;
+        }
+
+        .login-btn {
+            text-decoration: none;
+            color: white;
+            background: #ff0033;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* Layout */
+        .layout {
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            min-height: calc(100vh - 65px);
+            background: #181818;
+            padding: 20px 12px;
+            position: fixed;
+            left: 0;
+            top: 65px;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #ddd;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .sidebar a:hover {
+            background: #303030;
+            color: white;
+        }
+
+        .sidebar .active {
+            background: #303030;
+            color: white;
+        }
+
+        /* Main */
+        .main {
+            margin-left: 220px;
+            width: calc(100% - 220px);
+            padding: 25px;
+        }
+
+        .welcome {
+            background: linear-gradient(135deg, #ff0033, #7500ff);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #eee;
+            font-size: 16px;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            margin-bottom: 25px;
+        }
+
+        .category {
+            background: #272727;
+            padding: 9px 17px;
+            border-radius: 20px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .category:hover {
+            background: #444;
+        }
+
+        /* Videos */
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px 18px;
+        }
+
+        .video-card {
+            cursor: pointer;
+        }
+
+        .thumbnail {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #272727;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 45px;
+            color: #777;
+        }
+
+        .video-info {
+            display: flex;
+            gap: 12px;
+            padding-top: 12px;
+        }
+
+        .channel-icon {
+            min-width: 38px;
+            width: 38px;
+            height: 38px;
+            background: #ff0033;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .video-title {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .channel-name {
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .views {
+            color: #888;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        /* Mobile */
+        @media (max-width: 800px) {
+
+            header {
+                padding: 0 12px;
+                gap: 10px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .sidebar {
+                width: 70px;
+                padding: 10px 5px;
+            }
+
+            .sidebar a {
+                font-size: 0;
+                text-align: center;
+                padding: 15px 5px;
+            }
+
+            .sidebar a::first-letter {
+                font-size: 20px;
+            }
+
+            .main {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+                padding: 15px;
+            }
+
+            .welcome h1 {
+                font-size: 25px;
+            }
+
+            .search-box {
+                max-width: none;
+            }
+
+            .login-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome {
+                padding: 20px;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+
+    <div class="logo">
+        ▶ RLS Tube
+    </div>
+
+    <form class="search-box" action="/" method="GET">
+        <input
+            type="text"
+            name="q"
+            placeholder="Search videos..."
+            autocomplete="off"
+        >
+        <button type="submit">🔍</button>
+    </form>
+
+    <a href="/login" class="login-btn">
+        Login
+    </a>
+
+</header>
+
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <a href="/" class="active">
+            🏠 Home
+        </a>
+
+        <a href="/channel">
+            📺 Channels
+        </a>
+
+        <a href="/upload">
+            ⬆️ Upload
+        </a>
+
+        <a href="/watch">
+            ▶️ Watch
+        </a>
+
+        <a href="/login">
+            🔐 Login
+        </a>
+
+        <a href="/signup">
+            👤 Sign Up
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <!-- Welcome -->
+        <section class="welcome">
+
+            <h1>
+                Welcome to RLS Tube 🎬
+            </h1>
+
+            <p>
+                Watch videos, discover new channels and upload your own videos.
+            </p>
+
+        </section>
+
+
+        <!-- Categories -->
+        <div class="categories">
+
+            <div class="category">All</div>
+            <div class="category">Music</div>
+            <div class="category">Gaming</div>
+            <div class="category">Movies</div>
+            <div class="category">News</div>
+            <div class="category">Education</div>
+            <div class="category">Technology</div>
+            <div class="category">Comedy</div>
+
+        </div>
+
+
+        <!-- Videos -->
+        <h2 class="section-title">
+            Recommended Videos
+        </h2>
+
+
+        <div class="video-grid">
+
+
+            <!-- VIDEO 1 -->
+            <div class="video-card">
+
+                <div class="thumbnail">
+                    <div class="thumbnail-placeholder">
+                        ▶️
+                    </div>
+                </div>
+
+                <div class="video-info">
+
+                    <div class="channel-icon">
+                        R
+                    </div>
+
+                    <div>
+
+                        <div class="video-title">
+                            Welcome to RLS Tube
+                        </div>
+
+                        <div class="channel-name">
+                            RLS Tube
+                        </div>
+
+                        <div class="views">
+                            0 views • Just now
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- VIDEO 2 -->
+            <div class="video-card">
+
+                <div class="thumbnail">
+                    <div class="thumbnail-placeholder">
+                        🎬
+                    </div>
+                </div>
+
+                <div class="video-info">
+
+                    <div class="channel-icon">
+                        R
+                    </div>
+
+                    <div>
+
+                        <div class="video-title">
+                            Latest Videos
+                        </div>
+
+                        <div class="channel-name">
+                            RLS Tube
+                        </div>
+
+                        <div class="views">
+                            0 views • Just now
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- VIDEO 3 -->
+            <div class="video-card">
+
+                <div class="thumbnail">
+                    <div class="thumbnail-placeholder">
+                        🎮
+                    </div>
+                </div>
+
+                <div class="video-info">
+
+                    <div class="channel-icon">
+                        R
+                    </div>
+
+                    <div>
+
+                        <div class="video-title">
+                            Gaming Videos
+                        </div>
+
+                        <div class="channel-name">
+                            RLS Gaming
+                        </div>
+
+                        <div class="views">
+                            0 views • Just now
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- VIDEO 4 -->
+            <div class="video-card">
+
+                <div class="thumbnail">
+                    <div class="thumbnail-placeholder">
+                        🎵
+                    </div>
+                </div>
+
+                <div class="video-info">
+
+                    <div class="channel-icon">
+                        R
+                    </div>
+
+                    <div>
+
+                        <div class="video-title">
+                            Music & Entertainment
+                        </div>
+
+                        <div class="channel-name">
+                            RLS Music
+                        </div>
+
+                        <div class="views">
+                            0 views • Just now
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- VIDEO 5 -->
+            <div class="video-card">
+
+                <div class="thumbnail">
+                    <div class="thumbnail-placeholder">
+                        💻
+                    </div>
+                </div>
+
+                <div class="video-info">
+
+                    <div class="channel-icon">
+                        R
+                    </div>
+
+                    <div>
+
+                        <div class="video-title">
+                            Technology & Coding
+                        </div>
+
+                        <div class="channel-name">
+                            RLS Tech
+                        </div>
+
+                        <div class="views">
+                            0 views • Just now
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- VIDEO 6 -->
+            <div class="video-card">
+
+                <div class="thumbnail">
+                    <div class="thumbnail-placeholder">
+                        📚
+                    </div>
+                </div>
+
+                <div class="video-info">
+
+                    <div class="channel-icon">
+                        R
+                    </div>
+
+                    <div>
+
+                        <div class="video-title">
+                            Education Videos
+                        </div>
+
+                        <div class="channel-name">
+                            RLS Education
+                        </div>
+
+                        <div class="views">
+                            0 views • Just now
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+    // Simple search message
+    const searchForm = document.querySelector(".search-box");
+
+    searchForm.addEventListener("submit", function () {
+
+        const input = this.querySelector("input");
+
+        if (input.value.trim() === "") {
+            input.focus();
+            return;
+        }
+
+    });
+</script>
+
+</body>
+</html>

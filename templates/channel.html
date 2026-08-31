@@ -1,10 +1,189 @@
-<!doctype html><html><head><meta charset="UTF-8"><title>{{ channel.username }} - RLS Tube</title><link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"></head>
-<body><header><a class="logo" href="/">▶ <b>RLS</b> <span>Tube</span></a><a class="btn" href="/">Home</a></header>
-<main class="channel-page"><section class="channel-header"><div class="avatar">{{ channel.username[0].upper() }}</div><div><h1>{{ channel.username }}</h1><p>{{ subscribers }} subscribers</p>
-{% if session.get('user_id') and session['user_id'] != channel.id %}<button id="subBtn" onclick="subscribe({{ channel.id }})">Subscribe</button>{% endif %}
-</div></section>
-<h2>Videos</h2><div class="videos">{% for video in videos %}<article class="card"><a href="/watch/{{ video.id }}">{% if video.thumbnail %}<img src="{{ url_for('static',filename='uploads/'+video.thumbnail) }}">{% else %}<div class="no-thumb">▶</div>{% endif %}<h3>{{ video.title }}</h3></a><div class="muted">{{ video.views }} views</div></article>{% endfor %}</div></main>
-<script>
-async function subscribe(id){const r=await fetch("/subscribe/"+id,{method:"POST"});if(r.status===401){location="/login";return}const d=await r.json();if(d.error)return;document.getElementById("subBtn").textContent=d.subscribed?"Subscribed ✓":"Subscribe";}
-</script>
-</body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ channel.username }} - RLS Tube</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="topbar">
+
+        <div class="logo">
+            <a href="/">RLS Tube</a>
+        </div>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/upload">Upload</a>
+
+            {% if session.get('user_id') %}
+                <a href="/channel/{{ session.get('user_id') }}">My Channel</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/signup">Sign Up</a>
+            {% endif %}
+        </nav>
+
+    </header>
+
+
+    <!-- Channel Page -->
+    <main class="channel-page">
+
+        <section class="channel-header">
+
+            <div class="avatar">
+                {{ channel.username[0].upper() }}
+            </div>
+
+            <div class="channel-info">
+                <h1>{{ channel.username }}</h1>
+
+                <p>
+                    {{ subscribers }} subscribers
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- Subscribe Button -->
+        {% if session.get('user_id') and session['user_id'] != channel.id %}
+
+            <button
+                id="subBtn"
+                class="subscribe-btn"
+                onclick="subscribe({{ channel.id }})">
+                Subscribe
+            </button>
+
+        {% endif %}
+
+
+        <!-- Videos -->
+        <section class="channel-videos">
+
+            <h2>Videos</h2>
+
+            <div class="videos">
+
+                {% for video in videos %}
+
+                    <article class="card">
+
+                        <a href="/watch/{{ video.id }}">
+
+                            {% if video.thumbnail %}
+
+                                <img
+                                    src="{{ url_for('static', filename='uploads/' + video.thumbnail) }}"
+                                    alt="{{ video.title }}">
+
+                            {% else %}
+
+                                <div class="no-thumbnail">
+                                    RLS Tube
+                                </div>
+
+                            {% endif %}
+
+                        </a>
+
+                        <div class="video-info">
+
+                            <h3>
+                                {{ video.title }}
+                            </h3>
+
+                            {% if video.description %}
+
+                                <p>
+                                    {{ video.description }}
+                                </p>
+
+                            {% endif %}
+
+                            <span>
+                                {{ video.views }} views
+                            </span>
+
+                        </div>
+
+                    </article>
+
+                {% else %}
+
+                    <div class="empty-videos">
+                        <h3>No videos yet</h3>
+                        <p>This channel has not uploaded any videos.</p>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Subscribe JavaScript -->
+    <script>
+
+        async function subscribe(id) {
+
+            try {
+
+                const response = await fetch(
+                    "/subscribe/" + id,
+                    {
+                        method: "POST"
+                    }
+                );
+
+                if (response.status === 401) {
+
+                    window.location.href = "/login";
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+
+                    alert(data.error);
+                    return;
+                }
+
+                const button =
+                    document.getElementById("subBtn");
+
+                if (button) {
+
+                    button.textContent =
+                        data.subscribed
+                            ? "Subscribed"
+                            : "Subscribe";
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("Something went wrong.");
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>

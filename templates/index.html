@@ -1,37 +1,143 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>RLS Tube</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-<header>
-  <button class="menu" onclick="document.body.classList.toggle('side-open')">☰</button>
-  <a class="logo" href="/">▶ <b>RLS</b> <span>Tube</span></a>
-  <form class="search" action="/" method="get"><input name="q" placeholder="Search videos..." value="{{ request.args.get('q','') }}"><button>🔍</button></form>
-  {% if user %}<a class="btn" href="/upload">＋ Upload</a><a class="btn" href="/logout">Logout</a>
-  {% else %}<a class="btn" href="/login">Login</a>{% endif %}
-</header>
-<div class="layout">
-<aside>
-<a href="/">🏠 Home</a><a href="/">🎬 Shorts</a><a href="/">📺 Subscriptions</a><hr>
-<a href="/">📚 Library</a><a href="/">🕘 History</a><a href="/">👍 Liked Videos</a>
-</aside>
-<main>
-<div class="categories"><button>All</button><button>Gaming</button><button>Music</button><button>Live</button><button>News</button><button>Technology</button><button>Design</button></div>
-<div class="videos">
-{% for video in videos %}
-<article class="card">
-<a href="/watch/{{ video.id }}">
-{% if video.thumbnail %}<img src="{{ url_for('static',filename='uploads/'+video.thumbnail) }}">
-{% else %}<div class="no-thumb">▶</div>{% endif %}
-<h3>{{ video.title }}</h3></a>
-<a class="muted" href="/channel/{{ video.user_id }}">{{ video.username }}</a>
-<div class="muted">{{ video.views }} views</div>
-</article>
-{% else %}<h2>No videos found.</h2>{% endfor %}
-</div>
-</main></div>
-</body></html>
+
+    <!-- Header -->
+    <header class="topbar">
+
+        <div class="logo">
+            <a href="/">RLS Tube</a>
+        </div>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/upload">Upload</a>
+
+            {% if session.get('user_id') %}
+                <a href="/channel">My Channel</a>
+                <a href="/watch">Watch</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/signup">Sign Up</a>
+            {% endif %}
+        </nav>
+
+    </header>
+
+
+    <!-- Main Content -->
+    <main class="home-page">
+
+        <section class="hero">
+            <h1>Welcome to RLS Tube</h1>
+
+            <p>
+                Watch, upload and share your videos.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="/upload" class="btn">
+                    Upload Video
+                </a>
+
+                <a href="/signup" class="btn">
+                    Create Account
+                </a>
+            </div>
+        </section>
+
+
+        <!-- Videos -->
+        <section class="video-section">
+
+            <h2>Latest Videos</h2>
+
+            <div class="videos">
+
+                {% for video in videos %}
+
+                    <article class="card">
+
+                        <a href="/watch/{{ video.id }}">
+
+                            {% if video.thumbnail %}
+
+                                <img
+                                    src="{{ url_for('static', filename='uploads/' + video.thumbnail) }}"
+                                    alt="{{ video.title }}">
+
+                            {% else %}
+
+                                <div class="no-thumbnail">
+                                    RLS Tube
+                                </div>
+
+                            {% endif %}
+
+                        </a>
+
+                        <div class="video-info">
+
+                            <h3>
+                                {{ video.title }}
+                            </h3>
+
+                            {% if video.description %}
+
+                                <p>
+                                    {{ video.description }}
+                                </p>
+
+                            {% endif %}
+
+                            <span>
+                                {{ video.views }} views
+                            </span>
+
+                        </div>
+
+                    </article>
+
+                {% else %}
+
+                    <div class="empty-videos">
+
+                        <h3>No videos available</h3>
+
+                        <p>
+                            अभी कोई वीडियो upload नहीं किया गया है।
+                        </p>
+
+                        <a href="/upload" class="btn">
+                            Upload First Video
+                        </a>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 RLS Tube. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

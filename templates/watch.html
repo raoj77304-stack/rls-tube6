@@ -1,17 +1,236 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ video.title }}</title><link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"></head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ video.title }} - RLS Tube</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
 <body>
-<header><a class="logo" href="/">▶ <b>RLS</b> <span>Tube</span></a><a class="btn" href="/">Home</a></header>
-<main class="watch">
-<video controls autoplay><source src="{{ url_for('static',filename='uploads/'+video.filename) }}"></video>
-<h1>{{ video.title }}</h1><a class="channel-name" href="/channel/{{ video.user_id }}">{{ video.username }}</a>
-<div class="muted">{{ video.views }} views</div>
-<div class="actions"><button onclick="likeVideo({{ video.id }})">👍 <span id="likes">{{ likes }}</span></button><button onclick="navigator.clipboard.writeText(location.href)">↗ Share</button></div>
-<div class="description">{{ video.description }}</div>
-<h2>Comments</h2>
-{% if session.get('user_id') %}<form class="comment-form" method="post" action="/comment/{{ video.id }}"><input name="comment" placeholder="Add a comment..." required><button>Comment</button></form>{% else %}<p><a href="/login">Login</a> to comment.</p>{% endif %}
-{% for c in comments %}<div class="comment"><b>{{ c.username }}</b><p>{{ c.comment }}</p></div>{% endfor %}
-</main>
-<script>
-async function likeVideo(id){const r=await fetch("/like/"+id,{method:"POST"});if(r.status===401){location="/login";return}const d=await r.json();document.getElementById("likes").textContent=d.likes;}
-</script>
-</body></html>
+
+    <!-- Header -->
+    <header class="topbar">
+
+        <div class="logo">
+            <a href="/">RLS Tube</a>
+        </div>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/channel">Channels</a>
+            <a href="/upload">Upload</a>
+        </nav>
+
+        <div class="auth">
+            {% if session.get('user_id') %}
+                <a href="/channel">My Channel</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/signup">Sign Up</a>
+            {% endif %}
+        </div>
+
+    </header>
+
+
+    <!-- Watch Page -->
+    <main class="watch-page">
+
+        <div class="player">
+
+            {% if video.filename %}
+
+                <video
+                    controls
+                    autoplay
+                    playsinline>
+
+                    <source
+                        src="{{ url_for('static', filename='uploads/' + video.filename) }}"
+                        type="video/mp4">
+
+                    Your browser does not support video playback.
+
+                </video>
+
+            {% elif video.url %}
+
+                <video
+                    controls
+                    autoplay
+                    playsinline>
+
+                    <source
+                        src="{{ video.url }}"
+                        type="video/mp4">
+
+                    Your browser does not support video playback.
+
+                </video>
+
+            {% else %}
+
+                <div class="no-video">
+                    Video not available
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Video Details -->
+        <section class="video-details">
+
+            <h1>
+                {{ video.title }}
+            </h1>
+
+            <div class="video-meta">
+
+                <span>
+                    {{ video.views }} views
+                </span>
+
+            </div>
+
+
+            <div class="description">
+
+                {% if video.description %}
+
+                    <p>
+                        {{ video.description }}
+                    </p>
+
+                {% else %}
+
+                    <p>
+                        No description available.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- Channel -->
+        {% if channel %}
+
+        <section class="watch-channel">
+
+            <div class="channel-avatar">
+                {{ channel.username[0].upper() }}
+            </div>
+
+            <div>
+
+                <h3>
+                    {{ channel.username }}
+                </h3>
+
+                <p>
+                    {{ subscribers }} subscribers
+                </p>
+
+            </div>
+
+            <a
+                href="/channel/{{ channel.id }}"
+                class="btn">
+
+                View Channel
+
+            </a>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- Comments -->
+        <section class="comments">
+
+            <h2>
+                Comments
+            </h2>
+
+            {% if session.get('user_id') %}
+
+            <form method="POST"
+                  action="/comment/{{ video.id }}">
+
+                <textarea
+                    name="comment"
+                    placeholder="Add a comment..."
+                    rows="3"
+                    required></textarea>
+
+                <button
+                    type="submit"
+                    class="btn">
+
+                    Comment
+
+                </button>
+
+            </form>
+
+            {% else %}
+
+            <p>
+                <a href="/login">Login</a>
+                to comment on this video.
+            </p>
+
+            {% endif %}
+
+
+            {% if comments %}
+
+                {% for comment in comments %}
+
+                <div class="comment">
+
+                    <strong>
+                        {{ comment.username }}
+                    </strong>
+
+                    <p>
+                        {{ comment.text }}
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p class="no-comments">
+                    No comments yet. Be the first to comment!
+                </p>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            © 2026 RLS Tube. All Rights Reserved.
+        </p>
+
+    </footer>
+
+</body>
+</html>

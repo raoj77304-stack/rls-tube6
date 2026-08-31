@@ -1,8 +1,158 @@
-<!doctype html><html><head><meta charset="UTF-8"><title>Upload Video</title><link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"></head>
-<body><div class="upload-box"><h1>Upload Video</h1>
-<form method="post" enctype="multipart/form-data">
-<label>Video Title</label><input name="title" required>
-<label>Description</label><textarea name="description" placeholder="Video description"></textarea>
-<label>Video (MP4 / WEBM / MOV)</label><input type="file" name="video" accept="video/*" required>
-<label>Thumbnail (optional)</label><input type="file" name="thumbnail" accept="image/*">
-<button>Upload Video</button></form><a href="/">← Back Home</a></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Upload Video - RLS Tube</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="topbar">
+
+        <div class="logo">
+            <a href="/">RLS Tube</a>
+        </div>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/channel">My Channel</a>
+            <a href="/watch">Watch</a>
+        </nav>
+
+        <div class="auth">
+            <a href="/login">Login</a>
+            <a href="/signup">Sign Up</a>
+        </div>
+
+    </header>
+
+
+    <!-- Upload Page -->
+    <main class="upload-page">
+
+        <div class="upload-box">
+
+            <h1>Upload Video</h1>
+
+            <p class="upload-subtitle">
+                Share your video with RLS Tube
+            </p>
+
+
+            <form method="POST"
+                  action="/upload"
+                  enctype="multipart/form-data">
+
+
+                <!-- Video Title -->
+                <div class="form-group">
+
+                    <label for="title">
+                        Video Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="Enter video title"
+                        required>
+
+                </div>
+
+
+                <!-- Description -->
+                <div class="form-group">
+
+                    <label for="description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="5"
+                        placeholder="Write something about your video..."></textarea>
+
+                </div>
+
+
+                <!-- Video File -->
+                <div class="form-group">
+
+                    <label for="video">
+                        Select Video
+                    </label>
+
+                    <input
+                        type="file"
+                        id="video"
+                        name="video"
+                        accept="video/*"
+                        required>
+
+                </div>
+
+
+                <!-- Thumbnail -->
+                <div class="form-group">
+
+                    <label for="thumbnail">
+                        Thumbnail (Optional)
+                    </label>
+
+                    <input
+                        type="file"
+                        id="thumbnail"
+                        name="thumbnail"
+                        accept="image/*">
+
+                </div>
+
+
+                <!-- Submit -->
+                <button
+                    type="submit"
+                    class="btn upload-btn">
+
+                    Upload Video
+
+                </button>
+
+            </form>
+
+
+            <div class="upload-note">
+
+                <p>
+                    Supported video formats: MP4, WebM, MOV
+                </p>
+
+                <p>
+                    Please upload videos that you own or have permission to share.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            © 2026 RLS Tube. All Rights Reserved.
+        </p>
+
+    </footer>
+
+</body>
+</html>
